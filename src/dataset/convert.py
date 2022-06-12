@@ -14,7 +14,11 @@ def get_old_format(mat) -> list:
         # print(f"This is {i=} {box}\n")
         for j, values in enumerate(box[0]):
             # print(f"Onto {j=} {values}")
-
+            try:
+                if len(values[4]) == 0:
+                    continue
+            except:
+                pass
             boxes.append(
                 [
                     np.int32(values[0][0]),
@@ -76,10 +80,18 @@ if __name__ == "__main__":
                 y_pts = np.array([box[0][0], box[1][0], box[2][0], box[3][0]])
                 y1, y2 = np.min(y_pts), np.max(y_pts)
 
-                width = float(x2 - x1) / w
-                height = float(y2 - y1) / h
-                X = float(width + x1) / w
-                Y = float(height + y1) / h
+                width = float(x2 - x1)
+                height = float(y2 - y1)
+                X = float(width // 2 + x1) / w
+                Y = float(height // 2 + y1) / h
+
+                width /= w
+                height /= h
+
+                if X < 0:
+                    X = 0
+                if Y < 0:
+                    Y = 0
 
                 # img = show_labels(img, x_pts, y_pts)
 
